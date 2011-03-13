@@ -1,0 +1,51 @@
+/*!
+ * depends-js
+ *
+ * Javascript loader with dependency resolving
+ */
+
+var meta = {
+	author: "Hisataka Ishii",
+	email: "scraper.once@gmail.com",
+	license: "MIT License"
+};
+
+var feauture = [
+	"Namespace based dependency management",
+	"XMLHttp sync connection",
+	"Fast, light"
+];
+
+/**
+ * How to use
+ */
+
+// add your header:
+// <script type="text/javascript" src="path/to/depends.js"></script>
+
+// add your script head
+depends("objects");			// load ./object.js			as "object" object
+depends("your.data");		// load ./your.data.js		as "your.data" object
+depends("your/scripts");	// load ./your/scripts.js	as "your.scripts.js" object
+depends("script", "obj");	// load ./script.js			as "obj" object
+depends.path("lib");		// switch path
+depends("jquery", "$")		// load ./lib/jquery.js 		as "$" object
+
+// APIs
+
+/**
+ * depends(src[, ns[, callback]]);
+ *
+ * load external scripts sync.
+ * @param src		script source path.
+ * @param ns		namespace of script object. usually using src.
+ */
+
+/**
+ * depends.path(path);
+ *
+ * switch depends root path
+ * @param path		specify loading directory path.
+ */
+
+enjoy();
