@@ -1,7 +1,11 @@
 /*!
  * depends-js
+ * v1.0
  *
- * Javascript loader with dependency resolving
+ * fast javascript includer,
+ * with CommonJS compatible dependency resolving.
+ * SAVE THE GLOBAL SCOPE!
+ * (such as node.js' require!)
  */
 
 var meta = {
@@ -11,41 +15,48 @@ var meta = {
 };
 
 var feauture = [
-	"Namespace based dependency management",
+	"CommonJS compatible dependency management",
+	"No serverside directory resolving",
 	"XMLHttp sync connection",
-	"Fast, light"
+	"Fast and light"
 ];
 
 /**
  * How to use
  */
 
-// add your header:
+/* add to your header: */
 // <script type="text/javascript" src="path/to/depends.js"></script>
+// <script type="text/javascript" src="src/init.js"></script>
 
-// add your script head
-depends("objects");			// load ./object.js			as "object" object
-depends("your.data");		// load ./your.data.js		as "your.data" object
-depends("your/scripts");	// load ./your/scripts.js	as "your.scripts.js" object
-depends("script", "obj");	// load ./script.js			as "obj" object
-depends.path("lib");		// switch path
-depends("jquery", "$")		// load ./lib/jquery.js 		as "$" object
+/* add to your script: (check the script directories!) */
+//--src/init.js------------------
+var module = depends("src/module"); // first load scripts. (not asynchronous!)
+window.onload = function() {
+	module.getDataTable().jquery("body").innerHTML = "it works!"; // it works!!
+};
+
+//--src/module.js------------
+var Table = depends("common/data").Table;
+exports = {
+	getDataTable: function() {
+		return new Table();
+	}
+};
+
+//--src/common/data.js-------
+depends("../../lib/jquery-dummy", true); // directEvalMode. it simply evals with global scope!
+exports.Table = function() {
+	this.jquery = $;
+};
 
 // APIs
-
 /**
- * depends(src[, ns[, callback]]);
+ * depends(src[, directEvalMode=false]);
  *
  * load external scripts sync.
- * @param src		script source path.
- * @param ns		namespace of script object. usually using src.
- */
-
-/**
- * depends.path(path);
- *
- * switch depends root path
- * @param path		specify loading directory path.
+ * @param src               script source path.
+ * @param directEvalMode    if true, evaluate without CommonJS system. (default=false)
  */
 
 enjoy();
